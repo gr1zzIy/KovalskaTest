@@ -34,8 +34,8 @@ public class MonitoringParams
 
 public class ApiResponse
 {
-    [JsonPropertyName("result")]
-    public ApiResult Result { get; set; }
+    [JsonPropertyName("Result")]
+    public ApiResult? Result { get; set; }
 }
 
 public class ApiResult

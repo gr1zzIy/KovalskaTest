@@ -26,31 +26,21 @@ public class KovalskaApiService
     {
         var requestBody = new JsonRpcRequest
         {
-            Params = new MonitoringParams 
-            { 
-                AppId = "RAM", 
-                PersonnelNumber = "", 
-                FactoryCode = "00005" 
-            }
+            Params = new MonitoringParams { AppId = "RAM", FactoryCode = "00005" }
         };
 
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(Url, requestBody, new JsonSerializerOptions());
-            
-            if (!response.IsSuccessStatusCode)
-            {
-                Console.WriteLine($"Сервер повернув помилку: {response.StatusCode}");
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Деталі: {errorContent}");
-                return null;
-            }
-            
-            var data = await response.Content.ReadFromJsonAsync<ApiResponse>(new JsonSerializerOptions 
-            { 
-                PropertyNameCaseInsensitive = true 
-            });
-            
+            var response = await _httpClient.PostAsJsonAsync(Url, requestBody);
+            var jsonString = await response.Content.ReadAsStringAsync();
+
+            // Console.WriteLine("-----------------------------");
+            // Console.WriteLine(jsonString);
+            // Console.WriteLine("-----------------------------\n");
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var data = JsonSerializer.Deserialize<ApiResponse>(jsonString, options);
+        
             return data?.Result;
         }
         catch (Exception e)

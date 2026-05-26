@@ -22,7 +22,8 @@ public class Program
             Console.WriteLine("Дані не отримано.");
         }
 
-        Console.WriteLine("\nНатисніть будь-яку клавішу для виходу...");
-        Console.ReadKey();
+        Console.WriteLine("Зчитку завершино.");
+        // Console.WriteLine("\nНатисніть будь-яку клавішу для виходу...");
+        // Console.ReadKey();
     }
 }

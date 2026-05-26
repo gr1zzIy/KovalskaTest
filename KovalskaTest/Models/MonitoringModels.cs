@@ -9,6 +9,9 @@ public class TechnicalPlace
 {
     [JsonPropertyName("Name")]
     public string Name { get; set; } = default!;
+    
+    [JsonPropertyName("TechnicalPlaces")]
+    public List<TechnicalPlace>? SubTechnicalPlaces { get; set; }
 
     [JsonPropertyName("Equipments")]
     public List<Equipment> Equipments { get; set; } = new();
