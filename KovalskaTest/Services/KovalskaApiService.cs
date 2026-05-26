@@ -21,7 +21,7 @@ public class KovalskaApiService
     /// Відправляє POST-запит до API для отримання даних про ієрархію обладнання.
     /// </summary>
     /// <returns>Повертає <see cref="ApiResult"/> у разі успіху або null при виникненні помилки.</returns>
-    public async Task<ApiResult?> GetMonitoringPlan()
+    public async Task<ApiResult?> GetMonitoringPlanAsync()
     {
         var requestBody = new JsonRpcRequest
         {
