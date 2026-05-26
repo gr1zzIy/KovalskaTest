@@ -18,12 +18,16 @@ public static class TreeVisualizer
 
         foreach (var place in result.TechnicalPlaces)
         {
-            Console.WriteLine($"{place.Name} ({place.Equipments.Count})");
+            Console.WriteLine($"{place.Name ?? "Без назви"} ({place.Equipments?.Count ?? 0})");
 
+            if (place.Equipments == null) continue;
+            
             foreach (var equipment in place.Equipments)
             {
-                Console.WriteLine($"    {equipment.Name} ({equipment.MonitoringTasks.Count})");
+                Console.WriteLine($"    {equipment.Name ?? "Без назви"} ({equipment.MonitoringTasks?.Count ?? 0})");
 
+                if (equipment.MonitoringTasks == null) continue;
+                
                 foreach (var task in equipment.MonitoringTasks)
                 {
                     Console.WriteLine($"        {task.CharacteristicName}");

@@ -7,18 +7,24 @@ namespace KovalskaTest.Models;
 /// </summary>
 public class TechnicalPlace
 {
-    public string Name { get; set; }
+    [JsonPropertyName("Name")]
+    public string Name { get; set; } = default!;
+
+    [JsonPropertyName("Equipments")]
     public List<Equipment> Equipments { get; set; } = new();
 }
 
 public class Equipment
 {
-    public string Name { get; set; }
+    [JsonPropertyName("Name")]
+    public string Name { get; set; } = default!;
+
+    [JsonPropertyName("MonitoringTasks")]
     public List<MonitoringTask> MonitoringTasks { get; set; } = new();
 }
 
 public class MonitoringTask
 {
     [JsonPropertyName("CharacteristicName")]
-    public string CharacteristicName { get; set; }
+    public string CharacteristicName { get; set; } = default!;
 }

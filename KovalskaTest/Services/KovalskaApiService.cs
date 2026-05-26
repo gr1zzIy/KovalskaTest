@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text.Json;
 using KovalskaTest.Models;
 
 namespace KovalskaTest.Services;
@@ -25,20 +26,31 @@ public class KovalskaApiService
     {
         var requestBody = new JsonRpcRequest
         {
-            Params = new
-            {
-                AppId = "RAM",
-                PersonnelNumber = "",
-                FactoryCode = "00005"
+            Params = new MonitoringParams 
+            { 
+                AppId = "RAM", 
+                PersonnelNumber = "", 
+                FactoryCode = "00005" 
             }
         };
 
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(Url, requestBody);
-            response.EnsureSuccessStatusCode();
+            var response = await _httpClient.PostAsJsonAsync(Url, requestBody, new JsonSerializerOptions());
             
-            var data = await response.Content.ReadFromJsonAsync<ApiResponse>();
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Сервер повернув помилку: {response.StatusCode}");
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Деталі: {errorContent}");
+                return null;
+            }
+            
+            var data = await response.Content.ReadFromJsonAsync<ApiResponse>(new JsonSerializerOptions 
+            { 
+                PropertyNameCaseInsensitive = true 
+            });
+            
             return data?.Result;
         }
         catch (Exception e)
