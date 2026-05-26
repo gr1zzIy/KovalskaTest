@@ -12,7 +12,12 @@ public class KovalskaApiService
 {
     private readonly HttpClient _httpClient;
     private const string Url = "https://it-dev.kovalska.dev/DEV_TOR/ws/api/_MOBILEDATASYNC";
-
+    
+    private static readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+    
     public KovalskaApiService()
     {
         _httpClient = new HttpClient();
@@ -35,22 +40,31 @@ public class KovalskaApiService
 
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(Url, requestBody);
-            var jsonString = await response.Content.ReadAsStringAsync();
+            using var response = await _httpClient.PostAsJsonAsync(Url, requestBody, _jsonOptions);
 
-            // Console.WriteLine("-----------------------------");
-            // Console.WriteLine(jsonString);
-            // Console.WriteLine("-----------------------------\n");
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Помилка HTTP: {response.StatusCode}");
+                return null;
+            }
 
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var data = JsonSerializer.Deserialize<ApiResponse>(jsonString, options);
-        
+            var data = await response.Content.ReadFromJsonAsync<ApiResponse>(_jsonOptions);
+    
             return data?.Result;
         }
-        catch (Exception e)
+        catch (HttpRequestException ex)
         {
-            Console.WriteLine($"Помилка: {e.Message}");
-            return null;
+            Console.WriteLine($"Помилка підключення до мережі: {ex.Message}");
         }
+        catch (JsonException ex)
+        {
+            Console.WriteLine($"Отримано некоректний формат JSON: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Непередбачувана помилка: {ex.Message}");
+        }
+        
+        return null;
     }
 }
