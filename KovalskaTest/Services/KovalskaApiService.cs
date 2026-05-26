@@ -26,7 +26,11 @@ public class KovalskaApiService
     {
         var requestBody = new JsonRpcRequest
         {
-            Params = new MonitoringParams { AppId = "RAM", FactoryCode = "00005" }
+            Params = new MonitoringParams
+            {
+                AppId = "RAM", 
+                FactoryCode = "00005"
+            }
         };
 
         try
